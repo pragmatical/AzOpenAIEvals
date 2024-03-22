@@ -1,0 +1,2 @@
+azure_openai:
+  class: az_completion_fns.azure_openai:AzureOpenAIChatCompletionFn

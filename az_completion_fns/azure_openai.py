@@ -1,13 +1,12 @@
 import os
 from typing import Any, Optional, Union
 
-from openai import AzureOpenAI
-
 from evals.api import CompletionResult
 from evals.base import CompletionFnSpec
 from evals.prompt.base import ChatCompletionPrompt, OpenAICreateChatPrompt, Prompt
 from evals.record import record_sampling
 from evals.utils.api_utils import openai_chat_completion_create_retrying
+from openai import AzureOpenAI
 
 
 class AzureOpenAIBaseCompletionResult(CompletionResult):
@@ -32,16 +31,14 @@ class AzureOpenAIChatCompletionResult(AzureOpenAIBaseCompletionResult):
 class AzureOpenAIChatCompletionFn(CompletionFnSpec):
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_base: Optional[str] = None,
-        api_key: Optional[str] = None,
         n_ctx: Optional[int] = None,
         extra_options: Optional[dict] = {},
+        **kwargs,
     ):
         self.model = os.environ.get("AZURE_OPENAI_MODEL")
         self.api_base = os.environ.get("AZURE_OPENAI_ENDPOINT")
-        self.api_key = os.environ.get("AZURE_OPENAI_KEY")
-        self.api_version = os.environ.get("AZURE_OPENAI_VERSION")
+        self.api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+        self.api_version = os.environ.get("AZURE_OPENAI_API_VERSION")
         self.n_ctx = n_ctx
         self.extra_options = extra_options
 
