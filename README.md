@@ -2,6 +2,8 @@
 
 This repo contains a completionfunction for using azure openai chat completions api for running evals.
 
+NOTE: this requires an Azure OpenAI resource and credentials for that resource, even though we will be running evaluations against that Azure OpenAI API resource, there is still a need to provide a key for OpenAI API as the oaieval CLI requires it.
+
 ## Usage
 
 1. Install project required packages by runing the following command
