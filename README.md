@@ -35,6 +35,8 @@ NOTE: this requires an Azure OpenAI resource and credentials for that resource, 
 
    ``` bash
 
-   oaieval azure_openai test-match --registry_path registry
+   # Since some of the evaluation sets are quite large, we add the max_samples parameter to avoid overwhelming your Azure OpneAI resource
+
+   oaieval azure_openai test-match --registry_path registry --max_samples 5
 
    ```
