@@ -1,31 +1,12 @@
 import os
 from typing import Any, Optional, Union
 
-from evals.api import CompletionResult
 from evals.base import CompletionFnSpec
+from evals.completion_fns.openai import OpenAIChatCompletionResult
 from evals.prompt.base import ChatCompletionPrompt, OpenAICreateChatPrompt, Prompt
 from evals.record import record_sampling
 from evals.utils.api_utils import openai_chat_completion_create_retrying
 from openai import AzureOpenAI
-
-
-class AzureOpenAIBaseCompletionResult(CompletionResult):
-    def __init__(self, raw_data: Any, prompt: Any):
-        self.raw_data = raw_data
-        self.prompt = prompt
-
-    def get_completions(self) -> list[str]:
-        raise NotImplementedError
-
-
-class AzureOpenAIChatCompletionResult(AzureOpenAIBaseCompletionResult):
-    def get_completions(self) -> list[str]:
-        completions = []
-        if self.raw_data:
-            for choice in self.raw_data.choices:
-                if choice.message.content is not None:
-                    completions.append(choice.message.content)
-        return completions
 
 
 class AzureOpenAIChatCompletionFn(CompletionFnSpec):
@@ -46,7 +27,7 @@ class AzureOpenAIChatCompletionFn(CompletionFnSpec):
         self,
         prompt: Union[str, OpenAICreateChatPrompt],
         **kwargs,
-    ) -> AzureOpenAIChatCompletionResult:
+    ) -> OpenAIChatCompletionResult:
         if not isinstance(prompt, Prompt):
             assert (
                 isinstance(prompt, str)
@@ -82,7 +63,7 @@ class AzureOpenAIChatCompletionFn(CompletionFnSpec):
             messages=openai_create_prompt,
             **{**kwargs, **self.extra_options},
         )
-        result = AzureOpenAIChatCompletionResult(
+        result = OpenAIChatCompletionResult(
             raw_data=result, prompt=openai_create_prompt
         )
         record_sampling(prompt=result.prompt, sampled=result.get_completions())
